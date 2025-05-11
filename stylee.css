@@ -1,0 +1,41 @@
+body {
+    background-image: url('assets/backgroundHome.jpg');
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+}
+
+.hero-text {
+    color: white;
+    position: absolute;;
+    top: 40%;
+    left: 45%;
+    text-align: left;
+    font-size: 10px;
+}
+
+a{
+    color: white !important;
+}
+
+a:hover{
+    color: rgb(137, 255, 100) !important;
+}
+
+.dropdown-menu a.dropdown-item:hover {
+    background-color: #000000;
+    color: #fff;
+}
+
+h1{
+    font-size: 40px !important;
+    padding-bottom: 20px;
+    font-family: Boldonse;
+}
+
+p{
+    font-size: 15px !important;
+
+}
+
+
