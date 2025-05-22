@@ -22,6 +22,16 @@ a:hover{
     color: rgb(137, 255, 100) !important;
 }
 
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: white;
+}
+
+.btn-primary:hover {
+    background-color: #000000;
+    border-color: #134013;
+}
+
 .dropdown-menu a.dropdown-item:hover {
     background-color: #000000;
     color: #fff;
