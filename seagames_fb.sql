@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 02 Bulan Mei 2025 pada 20.31
+-- Waktu pembuatan: 29 Bulan Mei 2025 pada 13.03
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.2.12
 
@@ -24,6 +24,55 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Struktur dari tabel `admin`
+--
+
+CREATE TABLE `admin` (
+  `id_admin` int(11) NOT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `nama` varchar(50) NOT NULL,
+  `domisili` varchar(10) NOT NULL,
+  `tgl_bergabung` varchar(20) NOT NULL,
+  `jenis_kelamin` varchar(10) NOT NULL,
+  `umur` varchar(5) NOT NULL,
+  `profil` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `admin`
+--
+
+INSERT INTO `admin` (`id_admin`, `email`, `password`, `nama`, `domisili`, `tgl_bergabung`, `jenis_kelamin`, `umur`, `profil`) VALUES
+(1001, 'admin1@gmail.com', '123', 'Diandra Mayliza', 'Yogyakarta', '1 Mei 2023', 'Wanita', '19', 'https://assets.pikiran-rakyat.com/crop/47x290:673x985/x/photo/2022/09/13/674528463.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `last_match`
+--
+
+CREATE TABLE `last_match` (
+  `id` int(11) NOT NULL,
+  `judul` varchar(20) NOT NULL,
+  `negara1` varchar(100) DEFAULT NULL,
+  `negara2` varchar(100) DEFAULT NULL,
+  `skor1` int(11) DEFAULT NULL,
+  `skor2` int(11) DEFAULT NULL,
+  `stadion` varchar(100) DEFAULT NULL,
+  `tanggal` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `last_match`
+--
+
+INSERT INTO `last_match` (`id`, `judul`, `negara1`, `negara2`, `skor1`, `skor2`, `stadion`, `tanggal`) VALUES
+(1, 'FINAL SEA GAMES 2023', 'Indonesia', 'Thailand', 5, 2, 'Stadion Apakek', '2023-05-27');
+
+-- --------------------------------------------------------
+
+--
 -- Struktur dari tabel `negara`
 --
 
@@ -32,24 +81,26 @@ CREATE TABLE `negara` (
   `nama_negara` varchar(100) DEFAULT NULL,
   `pelatih` varchar(100) DEFAULT NULL,
   `nama_stadion` varchar(100) DEFAULT NULL,
-  `deskripsi` text DEFAULT NULL
+  `deskripsi` text DEFAULT NULL,
+  `bendera` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `negara`
 --
 
-INSERT INTO `negara` (`id_negara`, `nama_negara`, `pelatih`, `nama_stadion`, `deskripsi`) VALUES
-(1, 'Indonesia', 'Indra Sjafri', 'Stadion Utama Gelora Bung Karno', 'Indonesia mulai berkompetisi pada 1977 dan menjadi tuan rumah empat kali. Sering menempati posisi puncak perolehan medali SEA Games.'),
-(2, 'Thailand', 'Issara Sritaro', 'Rajamangala Stadium', 'Thailand adalah pendiri SEAGF dan selalu masuk tiga besar SEA Games. Jadi tuan rumah pertama untuk nama baru SEA Games.'),
-(3, 'Vietnam', 'Philippe Troussier', 'M? D?nh National Stadium', 'Vietnam mulai ikut SEA Games sejak 1989. Menjadi juara umum pada 2003, 2021, dan 2023 serta tuan rumah dua kali.'),
-(4, 'Malaysia', 'E. Elavarasan', 'Bukit Jalil National Stadium', 'Malaysia adalah pendiri SEAGF dan mengusulkan perluasan anggota SEA Games, menjadi tuan rumah SEA Games 1977.'),
-(5, 'Cambodia', 'Keisuke Honda', 'Morodok Techo National Stadium', 'Kamboja adalah pendiri SEAP Games, tetapi tidak ikut dalam edisi pertama.'),
-(6, 'Singapore', 'Nazri Nasir', 'National Stadium Singapore', 'Singapura adalah peserta SEA Games sejak 1959 dan telah menjadi tuan rumah empat kali. Total medali yang diraih melebihi 3.000.'),
-(7, 'Philippines', 'Rob Gier', 'Rizal Memorial Stadium', 'Filipina mulai berpartisipasi tahun 1977 dan menjadi tuan rumah SEA Games empat kali, dengan prestasi puncak saat menjadi tuan rumah.'),
-(8, 'Myanmar', 'Michael Feichtenbeiner', 'Thuwunna Stadium', 'Myanmar, sebelumnya Burma, adalah pendiri SEAP Games dan menjadi tuan rumah terakhir kali pada 2013.'),
-(9, 'Timor-Leste', 'Park Soon-tae', 'Est?dio Municipal de Dili', 'Timor Leste berpartisipasi pertama kali pada 2003 dan meraih medali emas pertamanya pada 2011.'),
-(10, 'Laos', 'Michael Wei?', 'New Laos National Stadium', 'Laos ikut SEA Games 2023 dengan 576 atlet dan bertanding di 32 cabang olahraga.');
+INSERT INTO `negara` (`id_negara`, `nama_negara`, `pelatih`, `nama_stadion`, `deskripsi`, `bendera`) VALUES
+(1, 'Indonesia', 'Indra Sjafri', 'Stadion Utama Gelora Bung Karno', 'Indonesia mulai berkompetisi pada 1977 dan menjadi tuan rumah empat kali. Sering menempati posisi puncak perolehan medali SEA Games.', 'https://upload.wikimedia.org/wikipedia/commons/0/0b/Flag_of_Indonesia.png'),
+(2, 'Thailand', 'Issara Sritaro', 'Rajamangala Stadium', 'Thailand adalah pendiri SEAGF dan selalu masuk tiga besar SEA Games. Jadi tuan rumah pertama untuk nama baru SEA Games.', 'https://upload.wikimedia.org/wikipedia/commons/a/a9/Flag_of_Thailand.svg'),
+(3, 'Vietnam', 'Philippe Troussier', 'M? D?nh National Stadium', 'Vietnam mulai ikut SEA Games sejak 1989. Menjadi juara umum pada 2003, 2021, dan 2023 serta tuan rumah dua kali.', 'https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Vietnam.svg'),
+(4, 'Malaysia', 'E. Elavarasan', 'Bukit Jalil National Stadium', 'Malaysia adalah pendiri SEAGF dan mengusulkan perluasan anggota SEA Games, menjadi tuan rumah SEA Games 1977.', 'https://upload.wikimedia.org/wikipedia/commons/6/66/Flag_of_Malaysia.svg'),
+(5, 'Cambodia', 'Keisuke Honda', 'Morodok Techo National Stadium', 'Kamboja adalah pendiri SEAP Games, tetapi tidak ikut dalam edisi pertama.', 'https://id.wikipedia.org/wiki/Bendera_Kamboja#/media/Berkas:Flag_of_Cambodia.svg'),
+(6, 'Singapore', 'Nazri Nasir', 'National Stadium Singapore', 'Singapura adalah peserta SEA Games sejak 1959 dan telah menjadi tuan rumah empat kali. Total medali yang diraih melebihi 3.000.', 'https://upload.wikimedia.org/wikipedia/commons/4/48/Flag_of_Singapore.svg'),
+(7, 'Philippines', 'Rob Gier', 'Rizal Memorial Stadium', 'Filipina mulai berpartisipasi tahun 1977 dan menjadi tuan rumah SEA Games empat kali, dengan prestasi puncak saat menjadi tuan rumah.', 'https://upload.wikimedia.org/wikipedia/commons/9/99/Flag_of_the_Philippines.svg'),
+(8, 'Myanmar', 'Michael Feichtenbeiner', 'Thuwunna Stadium', 'Myanmar, sebelumnya Burma, adalah pendiri SEAP Games dan menjadi tuan rumah terakhir kali pada 2013.', 'https://upload.wikimedia.org/wikipedia/commons/8/8c/Flag_of_Myanmar.svg'),
+(9, 'Timor-Leste', 'Park Soon-tae', 'Dili Municipal Stadium', 'Timor Leste berpartisipasi pertama kali pada 2003 dan meraih medali emas pertamanya pada 2011.', 'https://upload.wikimedia.org/wikipedia/commons/2/26/Flag_of_East_Timor.svg'),
+(10, 'Laos', 'Michael Weiss', 'New Laos National Stadium', 'Laos ikut SEA Games 2023 dengan 576 atlet dan bertanding di 32 cabang olahraga.', 'https://upload.wikimedia.org/wikipedia/commons/5/56/Flag_of_Laos.svg'),
+(19, 'brazil', 'Indra Sjafri', 'apa', 'c', 'https://id.wikipedia.org/wiki/Bendera_Laos#/media/Berkas:Flag_of_Laos.svg');
 
 -- --------------------------------------------------------
 
@@ -251,9 +302,79 @@ INSERT INTO `pemain` (`id_pemain`, `nama_pemain`, `posisi`, `no_punggung`, `id_n
 (179, 'Vathana Chounthavy', 'Goalkeeper', 19, 9),
 (180, 'Phonxay Sisavath', 'Goalkeeper', 20, 9);
 
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `previews`
+--
+
+CREATE TABLE `previews` (
+  `id` int(10) NOT NULL,
+  `judul` varchar(50) NOT NULL,
+  `deskripsi` varchar(100) NOT NULL,
+  `link_youtube` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `previews`
+--
+
+INSERT INTO `previews` (`id`, `judul`, `deskripsi`, `link_youtube`) VALUES
+(1, '[FINAL] Indonesia (5) VS (2) Thailand | SEA GAMES ', 'Indonesia menang 5-2 atas Thailand, raih emas SEA Games!\r\n', 'https://www.youtube.com/embed/VCRUS0dWu5U'),
+(2, 'template judul (2)', 'template deskripsi (2)', 'template link youtube (2)'),
+(3, 'template judul (3)', 'template deskripsi (3)', 'template link youtube (3)'),
+(4, 'template judul (4)', 'template deskripsi (4)', 'template link youtube (4)');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `statistik`
+--
+
+CREATE TABLE `statistik` (
+  `id` int(11) NOT NULL,
+  `last_match_id` int(11) DEFAULT NULL,
+  `nama_statistik` varchar(100) DEFAULT NULL,
+  `nilai_negara1` varchar(50) DEFAULT NULL,
+  `nilai_negara2` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `users`
+--
+
+CREATE TABLE `users` (
+  `id_user` int(11) NOT NULL,
+  `nama` varchar(100) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `users`
+--
+
+INSERT INTO `users` (`id_user`, `nama`, `email`, `password`) VALUES
+(1, 'user1', 'user1@gmail.com', 'abc');
+
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indeks untuk tabel `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`id_admin`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
+-- Indeks untuk tabel `last_match`
+--
+ALTER TABLE `last_match`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indeks untuk tabel `negara`
@@ -269,20 +390,52 @@ ALTER TABLE `pemain`
   ADD KEY `id_negara` (`id_negara`);
 
 --
+-- Indeks untuk tabel `statistik`
+--
+ALTER TABLE `statistik`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `last_match_id` (`last_match_id`);
+
+--
+-- Indeks untuk tabel `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id_user`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
 -- AUTO_INCREMENT untuk tabel yang dibuang
 --
+
+--
+-- AUTO_INCREMENT untuk tabel `last_match`
+--
+ALTER TABLE `last_match`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT untuk tabel `negara`
 --
 ALTER TABLE `negara`
-  MODIFY `id_negara` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_negara` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT untuk tabel `pemain`
 --
 ALTER TABLE `pemain`
-  MODIFY `id_pemain` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=181;
+  MODIFY `id_pemain` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=189;
+
+--
+-- AUTO_INCREMENT untuk tabel `statistik`
+--
+ALTER TABLE `statistik`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `users`
+--
+ALTER TABLE `users`
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
@@ -293,6 +446,12 @@ ALTER TABLE `pemain`
 --
 ALTER TABLE `pemain`
   ADD CONSTRAINT `pemain_ibfk_1` FOREIGN KEY (`id_negara`) REFERENCES `negara` (`id_negara`);
+
+--
+-- Ketidakleluasaan untuk tabel `statistik`
+--
+ALTER TABLE `statistik`
+  ADD CONSTRAINT `statistik_ibfk_1` FOREIGN KEY (`last_match_id`) REFERENCES `last_match` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
