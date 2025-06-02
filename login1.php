@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <title>Login Admin</title>
-  <link rel="stylesheet" href="login1.css" />
+  <link rel="stylesheet" href="login.css" />
 </head>
+
 <body>
   <div class="login-container">
     <h2>Login Admin</h2>
@@ -52,9 +54,11 @@
       <button type="submit" name="login">Login</button>
       <div style="text-align: center; margin-top: 20px;">
         <span>Bukan Admin?</span>
-        <a href="login2.php">Login sebagai User</a>
+        <a href="login2.php" style="color: #abdbe3;">Login sebagai User</a>
       </div>
     </form>
   </div>
+
 </body>
+
 </html>

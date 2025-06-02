@@ -1,10 +1,23 @@
 <?php
 include 'koneksi.php';
-$sql = "SELECT * FROM last_match ORDER BY id DESC LIMIT 1";
-$match = $koneksi->query($sql)->fetch_assoc();
+session_start();
 
-$sql = "SELECT * FROM statistik WHERE last_match_id = {$match['id']}";
-$stats = $koneksi->query($sql);
+$notifikasi = [];
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+    
+    $sql = "SELECT n.*, p.team1, p.team2 
+            FROM notifikasi n
+            JOIN pertandingan p ON n.id_pertandingan = p.id
+            WHERE n.id_user = $user_id AND n.dibaca = FALSE
+            ORDER BY n.created_at DESC
+            LIMIT 5";
+    
+    $result = mysqli_query($koneksi, $sql);
+    if ($result) {
+        $notifikasi = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+}
 ?>
 
 <!doctype html>
@@ -19,6 +32,8 @@ $stats = $koneksi->query($sql);
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Boldonse&family=Caveat+Brush&family=Merienda:wght@300..900&family=Moon+Dance&family=Rubik+Bubbles&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         body {
             background-image: url('assets/backgroundHome.jpg');
@@ -35,7 +50,7 @@ $stats = $koneksi->query($sql);
         .main-text {
             color: white;
             position: absolute;
-            top: 13%;
+            top: 12%;
             left: 46%;
             text-align: left;
         }
@@ -131,6 +146,73 @@ $stats = $koneksi->query($sql);
             color: white;
         }
 
+        body {
+            background: url("https://wallpaperaccess.com/full/1288357.jpg");
+        }
+
+        #klasemen h1 {
+            font-size: 24px;
+            color: rgb(255, 255, 255);
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        #klasemen .tables-container {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        #klasemen table {
+            width: 48%;
+            min-width: 400px;
+            border-collapse: collapse;
+            margin-bottom: 80px;
+            box-shadow: 0 0 15px rgba(137, 255, 100, 0.3);
+        }
+
+        #klasemen th {
+            background-color: #001a33;
+            color: rgb(137, 255, 100);
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            border: 1px solid rgba(137, 255, 100, 0.2);
+        }
+
+        #klasemen td {
+            background-color: rgba(0, 26, 51, 0.7);
+            color: white;
+            padding: 10px;
+            text-align: center;
+            border: 1px solid rgba(137, 255, 100, 0.1);
+        }
+
+        #klasemen tr:nth-child(even) td {
+            background-color: rgba(0, 26, 51, 0.5);
+        }
+
+        #klasemen .team-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: left;
+        }
+
+        #klasemen .team-name img {
+            width: 30px;
+            height: 20px;
+            object-fit: cover;
+            border: 1px solid rgba(137, 255, 100, 0.5);
+        }
+
+        #klasemen hr {
+            border-color: rgba(137, 255, 100, 0.3);
+            margin: 40px auto;
+            width: 80%;
+        }
+
         .footer {
             background-color: rgb(0, 0, 0);
             padding: 50px 0 20px;
@@ -190,6 +272,18 @@ $stats = $koneksi->query($sql);
         .footer a:hover {
             color: rgb(137, 255, 100) !important;
         }
+
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1100;
+        }
+
+        .toast-header {
+            background-color: #2e7d32;
+            color: white;
+        }
     </style>
 </head>
 
@@ -204,13 +298,9 @@ $stats = $koneksi->query($sql);
         <section class="main-section">
             <div class="container">
                 <div class="main-text">
-                    <h1>Bertanding dengan <span style="color: rgb(137, 255, 100);">Bangga</span></h1>
-                    <h1>Bersatu dalam <span style="color: rgb(137, 255, 100);">Sportivitas</span></h1>
-                    <p>Semua tentang sepak bola SEA Games: jadwal pertandingan, skor langsung, pratinjau,<br> dan profil tim nasional negara di Asia Tenggara dalam main platform.</p>
-                    <div class="mt-5">
-                        <a href="login1.php" class="btn btn-primary btn-lg me-3">Masuk</a>
-                        <a href="create.php" class="btn btn-primary btn-lg me-3">Daftar</a>
-                    </div>
+                    <h1>Menyatukan <span style="color: rgb(137, 255, 100);">ASEAN</span></h1>
+                    <h1>Dengan <span style="color: rgb(137, 255, 100);">Sepak Bola</span></h1>
+                    <p>Semua tentang sepak bola SEA Games: jadwal pertandingan, skor, preview,<br> dan profil tim nasional negara di Asia Tenggara dalam satu platform.</p>
                 </div>
             </div>
         </section>
@@ -233,8 +323,8 @@ $stats = $koneksi->query($sql);
                             <div class="feature-icon">
                                 <i class="bi bi-graph-up"></i>
                             </div>
-                            <h3>Hasil Real-time</h3>
-                            <p>Update skor langsung dan hasil pertandingan secara real-time.</p>
+                            <h3>Preview</h3>
+                            <p>Rekap dan highlight hasil pertandingan terbaru.</p>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -254,77 +344,191 @@ $stats = $koneksi->query($sql);
         <section class="match-section">
             <div class="match-container">
                 <div class="match-card">
-                    <div class="match-date"><b><?= $match['judul'] ?></b></div>
-                    <div class="match-title"><?= date('d F Y', strtotime($match['tanggal'])) ?></div>
+                    <div class="match-date"><b>FINAL SEA GAMES 2023</b></div>
+                    <div class="match-title">Selasa, 15 Mei</div>
                     <div class="d-flex justify-content-around align-items-center">
                         <div>
                             <img src="assets/Indonesia.png" class="team-logo" alt="Indonesia">
-                            <div><?= $match['negara1'] ?></div>
+                            <div>Indonesia</div>
                         </div>
-                        <div class="score-box"><?= $match['skor1'] ?> - <?= $match['skor2'] ?></div>
+                        <div class="score-box">5 - 2</div>
                         <div>
                             <img src="assets/Thailand.png" class="team-logo" alt="Thailand">
-                            <div><?= $match['negara2'] ?></div>
+                            <div>Thailand</div>
                         </div>
                     </div>
-                    <div class="match-title"><?= $match['stadion'] ?></div>
-                    <a href="statistik.php" class="btn">Statistik Pertandingan</a>
+                    <div class="match-title">National Olympic Stadium</div>
+                    <a href="preview.php" class="btn">Preview Pertandingan</a>
                 </div>
             </div>
         </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="inner">
-                <div class="column">
-                    <div class="main-logo">
-                        <div class="logo">
-                            <img src="assets/logo2.png" alt="SeaBall Logo">
+        <!-- Klasemen Section -->
+        <section id="klasemen" class="container">
+            <h1>KLASEMEN AKHIR SEA GAMES 2023</h1>
+            <div class="tables-container">
+                <?php
+                $sql = "SELECT k.*, n.nama_negara, n.id_negara 
+                FROM klasemen k
+                JOIN negara n ON k.id_negara = n.id_negara
+                ORDER BY k.grup, k.poin DESC, (k.goal_menang - k.goal_kalah) DESC, k.goal_menang DESC";
+                $result = $koneksi->query($sql);
+
+                $klasemen = [];
+                while ($row = $result->fetch_assoc()) {
+                    $klasemen[$row['grup']][] = $row;
+                }
+                foreach (['A', 'B'] as $grup) {
+                    if (isset($klasemen[$grup])) {
+                        echo '<div>
+                    <h1>Grup ' . $grup . '</h1>
+                    <table>
+                        <tr>
+                            <th>No</th>
+                            <th>Negara</th>
+                            <th>M</th>
+                            <th>M</th>
+                            <th>S</th>
+                            <th>K</th>
+                            <th>Goal</th>
+                            <th>Poin</th>
+                        </tr>';
+
+                        $no = 1;
+                        foreach ($klasemen[$grup] as $tim) {
+                            echo '<tr>
+                            <td>' . $no . '</td>
+                            <td class="team-name"> ' . strtoupper($tim['nama_negara']) . '</td>
+                            <td>' . $tim['main'] . '</td>
+                            <td>' . $tim['menang'] . '</td>
+                            <td>' . $tim['seri'] . '</td>
+                            <td>' . $tim['kalah'] . '</td>
+                            <td>' . $tim['goal_menang'] . '-' . $tim['goal_kalah'] . '</td>
+                            <td>' . $tim['poin'] . '</td>
+                        </tr>';
+                            $no++;
+                        }
+
+                        echo '</table>
+                </div>';
+                    }
+                }
+                ?>
+            </div>
+        </section>
+
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="inner">
+                    <div class="column">
+                        <div class="main-logo">
+                            <div class="logo">
+                                <img src="assets/logo2.png" alt="SeaBall Logo">
+                            </div>
+                            <div class="text">SeaBall.</div>
                         </div>
-                        <div class="text">SeaBall.</div>
+                    </div>
+                    <div class="column">
+                        <div class="column-title"><b>NAVIGASI</b></div>
+                        <ul>
+                            <li><a href="index.php">Beranda</a></li>
+                            <li><a href="schedule.php">Jadwal Pertandingan</a></li>
+                            <li><a href="result.php">Hasil Pertandingan</a></li>
+                            <li><a href="preview.php">Pratinjau Pertandingan</a></li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <div class="column-title"><b>NEGARA</b></div>
+                        <ul>
+                            <li><a href="negara.php?nama_negara=Indonesia">Indonesia</a></li>
+                            <li><a href="negara.php?nama_negara=Thailand">Thailand</a></li>
+                            <li><a href="negara.php?nama_negara=Vietnam">Vietnam</a></li>
+                            <li><a href="negara.php?nama_negara=Philippines">Filipina</a></li>
+                            <li><a href="negara.php?nama_negara=Malaysia">Malaysia</a></li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <div class="column-title"><b>HUBUNGI KAMI</b></div>
+                        <ul>
+                            <li><i class="bi bi-envelope me-2"></i> seaball@gmail.com</li>
+                            <li><i class="bi bi-telephone me-2"></i> +62 123 4567 890</li>
+                            <li><i class="bi bi-geo-alt me-2"></i> Yogyakarta, Indonesia</li>
+                        </ul>
+                        <div class="social-media mt-3">
+                            <a href="#" class="me-2"><a class="bi bi-facebook"></a></a>
+                            <a href="#" class="me-2"><a class="bi bi-instagram"></a></a>
+                            <a href="#" class="me-2"><a class="bi bi-youtube"></a></a>
+                        </div>
                     </div>
                 </div>
-                <div class="column">
-                    <div class="column-title"><b>NAVIGASI</b></div>
-                    <ul>
-                        <li><a href="index.php">Beranda</a></li>
-                        <li><a href="schedule.php">Jadwal Pertandingan</a></li>
-                        <li><a href="result.php">Hasil Pertandingan</a></li>
-                        <li><a href="preview.php">Pratinjau Pertandingan</a></li>
-                    </ul>
-                </div>
-                <div class="column">
-                    <div class="column-title"><b>NEGARA</b></div>
-                    <ul>
-                        <li><a href="negara.php?nama_negara=Indonesia">Indonesia</a></li>
-                        <li><a href="negara.php?nama_negara=Thailand">Thailand</a></li>
-                        <li><a href="negara.php?nama_negara=Vietnam">Vietnam</a></li>
-                        <li><a href="negara.php?nama_negara=Philippines">Filipina</a></li>
-                        <li><a href="negara.php?nama_negara=Malaysia">Malaysia</a></li>
-                    </ul>
-                </div>
-                <div class="column">
-                    <div class="column-title"><b>HUBUNGI KAMI</b></div>
-                    <ul>
-                        <li><i class="bi bi-envelope me-2"></i> seaball@gmail.com</li>
-                        <li><i class="bi bi-telephone me-2"></i> +62 123 4567 890</li>
-                        <li><i class="bi bi-geo-alt me-2"></i> Yogyakarta, Indonesia</li>
-                    </ul>
-                    <div class="social-media mt-3">
-                        <a href="#" class="me-2"><a class="bi bi-facebook"></a></a>
-                        <a href="#" class="me-2"><a class="bi bi-instagram"></a></a>
-                        <a href="#" class="me-2"><a class="bi bi-youtube"></a></a>
-                    </div>
+                <div class="text-center mt-4" style="color: #aaa;">
+                    <p>© 2023 SeaBall. All Rights Reserved.</p>
                 </div>
             </div>
-            <div class="text-center mt-4" style="color: #aaa;">
-                <p>© 2023 SeaBall. All Rights Reserved.</p>
+        </footer>
+
+        <!-- Toast Notification -->
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <strong class="me-auto" id="toast-title">Notifikasi Baru</strong>
+                    <small id="toast-time">Baru saja</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-bell-fill text-primary me-2"></i>
+                        <div>
+                            <span id="toast-message">Pesan notifikasi akan muncul di sini</span>
+                            <div class="text-muted small mt-1">
+                                <span id="toast-team">Tim: -</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            // Fungsi buat cek notif terbaru
+            function checkNewNotifications() {
+                <?php if (isset($_SESSION['id_user'])): ?>
+                    fetch('check_notifications.php?user_id=<?= $_SESSION['id_user'] ?>')
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.unread_count > 0) {
+                                // Tampilkan notifikasi popup
+                                data.notifications.forEach(notif => {
+                                    Swal.fire({
+                                        title: notif.judul,
+                                        text: notif.pesan,
+                                        icon: 'info',
+                                        confirmButtonText: 'OK'
+                                    });
+                                });
+
+                                // Update badge notifikasi
+                                if (data.unread_count > 0) {
+                                    document.getElementById('notification-badge').textContent = data.unread_count;
+                                    document.getElementById('notification-badge').style.display = 'inline-block';
+                                }
+                            }
+                        });
+                <?php endif; ?>
+            }
+
+            // Cek notifikasi setiap 30 detik
+            setInterval(checkNewNotifications, 30000);
+
+            // Cek saat page load
+            document.addEventListener('DOMContentLoaded', function() {
+                checkNewNotifications();
+            });
+        </script>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
