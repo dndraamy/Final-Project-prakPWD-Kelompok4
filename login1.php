@@ -31,6 +31,7 @@
         if (mysqli_num_rows($result) > 0) {
           $_SESSION['id_admin'] = $id_admin;
           $_SESSION['logged_in'] = true;
+          $_SESSION['role'] = 'admin';
           $_SESSION['status'] = "login_admin";
           header("Location: dashboard_admin.php");
           exit();
